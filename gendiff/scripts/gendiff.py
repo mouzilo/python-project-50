@@ -1,5 +1,5 @@
 import argparse
-
+from gendiff.scripts.gendiff_json import gendiff_json
 
 def main():
     parser = argparse.ArgumentParser(
@@ -9,7 +9,10 @@ def main():
     parser.add_argument('--f', '--format', metavar='FORMAT',
                         type=str, help='set format for output')
     args = parser.parse_args()
-    return args.first_file
+
+    file1 = args.first_file
+    file2 = args.second_file
+    return gendiff_json(file1, file2)
 
 
 if __name__ == '__main__':
