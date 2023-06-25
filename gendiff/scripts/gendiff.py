@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 from gendiff.scripts.gendiff_json import gendiff_json
 
