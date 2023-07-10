@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 from gendiff.scripts.gendiff_json import gendiff_json
 
 
@@ -13,9 +14,11 @@ def main():
                         type=str, help='set format for output')
     args = parser.parse_args()
 
-    file1 = args.first_file
-    file2 = args.second_file
-    return gendiff_json(file1, file2)
+    base_dir = os.path.join(os.getcwd(), 'files')
+    file1 = os.path.join(base_dir, args.first_file)
+    file2 = os.path.join(base_dir, args.second_file)
+    result = gendiff_json(file1, file2)
+    print(result)
 
 
 if __name__ == '__main__':

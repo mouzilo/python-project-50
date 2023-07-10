@@ -1,9 +1,9 @@
 import json
 
 
-def gendiff_json(file1, file2):
-    file1 = json.load(open('files/file1.json'))
-    file2 = json.load(open('files/file2.json'))
+def gendiff_json(file1_path, file2_path):
+    file1 = json.load(open(file1_path))
+    file2 = json.load(open(file2_path))
 
     c = {}
     for key, value in sorted(file1.items()):
@@ -22,4 +22,7 @@ def gendiff_json(file1, file2):
 
 
 if __name__ == '__main__':
-    gendiff_json('files/file1.json', 'files/file2.json')
+    file1 = 'file1.json'
+    file2 = 'file2.json'
+    result = gendiff_json(file1, file2)
+    print(result)
