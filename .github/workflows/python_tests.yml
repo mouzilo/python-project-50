@@ -26,3 +26,6 @@ jobs:
 
     - name: Run tests
       run: pytest
+      
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v2
