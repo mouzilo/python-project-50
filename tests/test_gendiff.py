@@ -22,5 +22,3 @@ def test_gendiff_json(file1_path, file2_path):
     result_dict = json.loads(result)
 
     assert result_dict == expected_result
-
-
