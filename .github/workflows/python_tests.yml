@@ -27,6 +27,7 @@ jobs:
     - name: Run tests
       run: pytest
 
-    - name: Upload coverage to Codecov
-      run: codecov
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v2
+
 
