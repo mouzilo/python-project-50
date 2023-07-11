@@ -27,5 +27,11 @@ jobs:
     - name: Run tests
       run: pytest
       
-    - name: Coveralls GitHub Action
-      uses: coverallsapp/github-action@v2
+    - name: Test & publish code coverage
+      uses: paambaati/codeclimate-action@v3.2.0
+      if: github.ref_name == 'main'
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      with:
+        coverageCommand: make test-coverage
+        debug: true
