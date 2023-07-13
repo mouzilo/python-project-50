@@ -1,16 +1,16 @@
-import json
-from gendiff.scripts.gendiff_json import gendiff_json
 import pytest
+import yaml
+from gendiff.parser.parse_files import parse_files
 
 @pytest.fixture
-def file1_path():
+def file1():
     return 'tests/test1.json'
 
 @pytest.fixture
-def file2_path():
-    return 'tests/test2.json'
+def file2():
+    return 'tests/test2.yml'
 
-def test_gendiff_json(file1_path, file2_path):
+def test_parse(file1, file2):
     expected_result = {
         "- key4": "value4",
         "+ key2": "value2",
@@ -18,7 +18,7 @@ def test_gendiff_json(file1_path, file2_path):
         "key3": "value3"
     }
 
-    result = gendiff_json(file1_path, file2_path)
-    result_dict = json.loads(result)
+    result = parse_files(file1, file2)
+    result_dict = yaml.safe_load(result)
 
     assert result_dict == expected_result
