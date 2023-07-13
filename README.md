@@ -6,3 +6,6 @@
 
 ### Test Coverage
 <a href="https://codeclimate.com/github/mouzilo/python-project-50/test_coverage"><img src="https://api.codeclimate.com/v1/badges/34b0638876a033af89d4/test_coverage" /></a>
+
+### Asciinema
+[![asciicast](https://asciinema.org/a/kilivunR3bW1BagElt0ahF3yI.svg)](https://asciinema.org/a/kilivunR3bW1BagElt0ahF3yI)
