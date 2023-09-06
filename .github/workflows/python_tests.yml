@@ -24,6 +24,7 @@ jobs:
       run: |
           pip install poetry
           make install
+          pip install pyyaml
           
     - name: Install pytest
       run: pip install pytest
