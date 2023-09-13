@@ -27,13 +27,13 @@ def generate_diff(dict1, dict2):
 
     keys = dict1.keys() | dict2.keys()
 
-    for key in keys:
-        if key in dict1 and key not in dict2:
+    for key in sorted(keys):
+        if (key in dict1) and (key not in dict2):
             result.append(dict(key=key,
                                value=dict1[key],
                                type='deleted'))
 
-        elif key in dict2 and key not in dict1:
+        elif (key in dict2) and (key not in dict1):
             result.append(dict(key=key,
                                value=dict2[key],
                                type='added'))
@@ -61,19 +61,41 @@ def generate_diff(dict1, dict2):
 
 
 def format_added(key, value, depth=1):
-    return f"{get_space(2) * depth}+ {key}: {value}"
+    return f"{get_space(4 * depth - 2)}+ {key}: {value}"
 
 
 def format_removed(key, value, depth=1):
-    return f"{get_space(2) * depth}- {key}: {value}"
+    return f"{get_space(4 * depth - 2)}- {key}: {value}"
 
 
 def format_unchanged(key, value, depth=1):
-    return f"{get_space(4) * depth}{key}: {value}"
+    return f"{get_space(4 * depth)}{key}: {value}"
 
 
 def get_space(num):
     return num * " "
+
+
+def resolve_value(value, depth=0):
+    if value is None:
+        return "null"
+    elif isinstance(value, dict):
+        return resolve_nested(value, depth)
+    return value
+
+
+def resolve_nested(dict_value, depth=0):
+    result = ['{']
+    depth += 1
+    for key, value in dict_value.items():
+        if isinstance(value, dict):
+            result.append(format_unchanged(key, resolve_nested(value, depth), depth))
+        else:
+            result.append(format_unchanged(key, resolve_value(value), depth))
+
+    result.append(f'{get_space(4*(depth-1))}}}')
+
+    return '\n'.join(result)
 
 
 def format_stylish(diff, depth=0):
@@ -81,23 +103,38 @@ def format_stylish(diff, depth=0):
     depth += 1
     for el in diff:
         if el['type'] == 'unchanged':
-            result.append(format_unchanged(el['key'], el['value'], depth))
+            result.append(
+              format_unchanged(el['key'],
+                               resolve_value(el['value'], depth),
+                               depth))
 
         elif el['type'] == 'changed':
-            result.append(format_added(el['key'], el['value'][0], depth))
-            result.append(format_removed(el['key'], el['value'][1], depth))
+            result.append(
+              format_removed(el['key'],
+                           resolve_value(el['value'][0], depth),
+                           depth))
+            result.append(
+              format_added(el['key'],
+                             resolve_value(el['value'][1], depth),
+                                        depth))
 
         elif el['type'] == 'nested':
-            result.append(format_unchanged(el['key'],
-                                           format_stylish(el['value'], depth),
-                                           depth))
+            result.append(
+              format_unchanged(el['key'],
+                              format_stylish(el['value'], depth), depth))
         elif el['type'] == 'added':
-            result.append(format_added(el['key'], el['value'], depth))
+            result.append(
+              format_added(el['key'],
+                           resolve_value(el['value'], depth),
+                           depth))
 
         elif el['type'] == 'deleted':
-            result.append(format_removed(el['key'], el['value'], depth))
+            result.append(
+              format_removed(el['key'],
+                           resolve_value(el['value'], depth),
+                           depth))
 
-    result.append(get_space(depth) + '}')
+    result.append(f'{get_space(4*(depth-1))}}}')
 
     return '\n'.join(result)
 
@@ -129,4 +166,3 @@ if __name__ == '__main__':
     file1 = 'file1.json'
     file2 = 'file2.yaml'
     result = parse_files(file1, file2)
-    print(result)

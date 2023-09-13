@@ -10,6 +10,7 @@ def file1():
 def file2():
     return 'tests/test2.yml'
 
+
 def test_parse(file1, file2):
     expected_result = {
         "- key4": "value4",
