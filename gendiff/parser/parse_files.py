@@ -159,7 +159,7 @@ def parse_files(file1_path, file2_path):
 
     differences = format_stylish(generate_diff(file1, file2))
 
-    print(differences)
+    return differences
 
 
 if __name__ == '__main__':
